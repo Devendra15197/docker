@@ -10,6 +10,7 @@ services:
 
   userdb:
     image: postgres:16
+    platform: linux/amd64
     container_name: job-portal-userdb
     mem_limit: 512m
     mem_reservation: 256m
@@ -31,6 +32,7 @@ services:
 
   companydb:
     image: postgres:16
+    platform: linux/amd64
     container_name: job-portal-companydb
     mem_limit: 512m
     mem_reservation: 256m
@@ -51,6 +53,7 @@ services:
 
   jobdb:
     image: postgres:16
+    platform: linux/amd64
     container_name: job-portal-jobdb
     mem_limit: 512m
     mem_reservation: 256m
@@ -71,6 +74,7 @@ services:
 
   applicationdb:
     image: postgres:16
+    platform: linux/amd64
     container_name: job-portal-applicationdb
     mem_limit: 512m
     mem_reservation: 256m
@@ -91,6 +95,7 @@ services:
 
   preferencedb:
     image: postgres:16
+    platform: linux/amd64
     container_name: job-portal-preferencedb
     mem_limit: 512m
     mem_reservation: 256m
@@ -111,6 +116,7 @@ services:
 
   resumedb:
     image: postgres:16
+    platform: linux/amd64
     container_name: job-portal-resumedb
     mem_limit: 512m
     mem_reservation: 256m
@@ -135,6 +141,7 @@ services:
 
   discovery-service:
     image: devendra1597/job-portal-service-registry:latest
+    platform: linux/amd64
     container_name: job-portal-discovery-server
     mem_limit: 512m
     mem_reservation: 256m
@@ -152,6 +159,7 @@ services:
 
   config-service:
     image: devendra1597/job-portal-config-server:latest
+    platform: linux/amd64
     container_name: job-portal-config-server
     mem_limit: 512m
     mem_reservation: 256m
@@ -174,6 +182,7 @@ services:
 
   gateway-service:
     image: devendra1597/job-portal-api-gateway:latest
+    platform: linux/amd64
     container_name: job-portal-api-gateway
     mem_limit: 512m
     mem_reservation: 256m
@@ -196,6 +205,7 @@ services:
 
   user-service:
     image: devendra1597/job-portal-user-service:latest
+    platform: linux/amd64
     container_name: job-portal-user-service
     mem_limit: 512m
     mem_reservation: 256m
@@ -218,6 +228,7 @@ services:
 
   company-service:
     image: devendra1597/job-portal-company-service:latest
+    platform: linux/amd64
     container_name: job-portal-company-service
     mem_limit: 512m
     mem_reservation: 256m
@@ -241,6 +252,7 @@ services:
 
   job-service:
     image: devendra1597/job-portal-job-service:latest
+    platform: linux/amd64
     container_name: job-portal-job-service
     mem_limit: 512m
     mem_reservation: 256m
@@ -250,7 +262,7 @@ services:
     depends_on:
       config-service:
         condition: service_healthy
-      companydb:
+      jobdb:
         condition: service_healthy
     environment:
       SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
@@ -263,6 +275,7 @@ services:
 
   application-service:
     image: devendra1597/job-portal-application-service:latest
+    platform: linux/amd64
     container_name: job-portal-application-service
     mem_limit: 512m
     mem_reservation: 256m
