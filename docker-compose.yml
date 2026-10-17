@@ -188,15 +188,18 @@ services:
     mem_reservation: 256m
     cpus: 0.5
     ports:
-      - "5000:5000"
+      - "5007:5007"
     depends_on:
+      discovery-service:
+        condition: service_healthy
       config-service:
         condition: service_healthy
     environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+      SERVER_PORT: 5007
     healthcheck:
-      test: [ "CMD-SHELL", "wget http://localhost:5000/actuator/health || exit 1" ]
+      test: [ "CMD-SHELL", "wget http://localhost:5007/actuator/health || exit 1" ]
       interval: 15s
       timeout: 10s
       retries: 8
@@ -211,18 +214,21 @@ services:
     mem_reservation: 256m
     cpus: 0.5
     ports:
-      - "5001:5000"
+      - "5001:5001"
     depends_on:
+      discovery-service:
+        condition: service_healthy
       config-service:
         condition: service_healthy
       userdb:
         condition: service_healthy
     environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
       SPRING_DATASOURCE_URL: jdbc:postgresql://userdb:5432/job_portal_user
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+      SERVER_PORT: 5001
     networks:
       - job-portal-network
 
@@ -234,18 +240,21 @@ services:
     mem_reservation: 256m
     cpus: 0.5
     ports:
-      - "5002:5000"
+      - "5002:5002"
     depends_on:
+      discovery-service:
+        condition: service_healthy
       config-service:
         condition: service_healthy
       companydb:
         condition: service_healthy
     environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
       SPRING_DATASOURCE_URL: jdbc:postgresql://companydb:5432/job_portal_company
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+      SERVER_PORT: 5002
     networks:
       - job-portal-network
 
@@ -258,18 +267,21 @@ services:
     mem_reservation: 256m
     cpus: 0.5
     ports:
-      - "5003:5000"
+      - "5003:5003"
     depends_on:
+      discovery-service:
+        condition: service_healthy
       config-service:
         condition: service_healthy
       jobdb:
         condition: service_healthy
     environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
       SPRING_DATASOURCE_URL: jdbc:postgresql://jobdb:5432/job_portal_job
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+      SERVER_PORT: 5003
     networks:
       - job-portal-network
 
@@ -281,78 +293,93 @@ services:
     mem_reservation: 256m
     cpus: 0.5
     ports:
-      - "5004:5000"
+      - "5005:5005"
     depends_on:
+      discovery-service:
+        condition: service_healthy
       config-service:
         condition: service_healthy
       applicationdb:
         condition: service_healthy
     environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
       SPRING_DATASOURCE_URL: jdbc:postgresql://applicationdb:5432/job_portal_application
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+      SERVER_PORT: 5005
     networks:
       - job-portal-network
 
   preference-service:
     image: devendra1597/job-portal-preferences-service:latest
+    platform: linux/amd64
     container_name: job-portal-preferences-service
     mem_limit: 512m
     mem_reservation: 256m
     cpus: 0.5
     ports:
-      - "5005:5000"
+      - "5006:5006"
     depends_on:
+      discovery-service:
+        condition: service_healthy
       config-service:
         condition: service_healthy
       preferencedb:
         condition: service_healthy
     environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
       SPRING_DATASOURCE_URL: jdbc:postgresql://preferencedb:5432/job_portal_preference
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+      SERVER_PORT: 5006
     networks:
       - job-portal-network
 
   resume-service:
     image: devendra1597/job-portal-resume-service:latest
+    platform: linux/amd64
     container_name: job-portal-resume-service
     mem_limit: 512m
     mem_reservation: 256m
     cpus: 0.5
     ports:
-      - "5006:5000"
+      - "5004:5004"
     depends_on:
+      discovery-service:
+        condition: service_healthy
       config-service:
         condition: service_healthy
       resumedb:
         condition: service_healthy
     environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
       SPRING_DATASOURCE_URL: jdbc:postgresql://resumedb:5432/job_portal_resume
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+      SERVER_PORT: 5004
     networks:
       - job-portal-network
 
   ai-service:
     image: devendra1597/job-portal-ai-service:latest
+    platform: linux/amd64
     container_name: job-portal-ai-service
     mem_limit: 512m
     mem_reservation: 256m
     cpus: 0.5
     ports:
-      - "5007:5000"
+      - "5008:5008"
     depends_on:
+      discovery-service:
+        condition: service_healthy
       config-service:
         condition: service_healthy
     environment:
-      SPRING_CONFIG_IMPORT: optional:configserver:http://config-service:8888
+      SPRING_CONFIG_IMPORT: configserver:http://config-service:8888
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+      SERVER_PORT: 5008
     networks:
       - job-portal-network
